@@ -25,15 +25,12 @@ warmStrategyCache({
 }); 
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
+
 // service worker is registered for caching
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/src-sw.js');
-  });
-
-  this.addEventListener('fetch', function (event) {
-    // This fetch function is required for the service worker to be detected and is intentionally empty
-  });
-}
-
-registerRoute();
+registerRoute(
+  ({request}) => ["style", "script", "worker"].includes(request.destination),
+  new StaleWhileRevalidate({
+    cacheName:"asset-cache", 
+    plugins:[new CacheableResponsePlugin({statuses:[0, 200]})]
+  })
+);
