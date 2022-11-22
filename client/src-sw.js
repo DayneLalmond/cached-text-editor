@@ -22,7 +22,7 @@ const pageCache = new CacheFirst({
 warmStrategyCache({
   urls: ['/index.html', '/'],
   strategy: pageCache,
-}); 
+});
 
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
